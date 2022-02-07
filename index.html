@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Cylinder</title>
+</head>
+
+<body>
+</body>
+<script type="module">
+    import * as THREE from 'https://cdn.jsdelivr.net/npm/three@0.121.1/build/three.module.js';
+    import { OrbitControls } from 'https://cdn.jsdelivr.net/npm/three@0.121.1/examples/jsm/controls/OrbitControls.js';
+
+    const scene = new THREE.Scene();
+    const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 50000);
+    camera.position.z = 300;
+    camera.position.y = -700;
+
+
+    const renderer = new THREE.WebGLRenderer();
+    renderer.setSize(window.innerWidth, window.innerHeight);
+    document.body.appendChild(renderer.domElement);
+
+
+
+    const controls = new OrbitControls(camera, renderer.domElement);
+    controls.update();
+    
+    
+    
+    THREE.ImageUtils.crossOrigin = "anonymous";
+
+
+
+
+
+
+    const sp1 = new THREE.SphereGeometry(10000, 40, 40);
+    const ms1 = new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture("https://4.bp.blogspot.com/-cydivUBZPlM/UkcGpV2C3EI/AAAAAAAAK-8/Zq2Zw_u2P0I/s1600/galaxy_starfield.png"),
+        side: THREE.BackSide
+    });
+    const backgroung = new THREE.Mesh(sp1, ms1);
+    scene.add(backgroung);
+
+
+
+    const geometry1 = new THREE.PlaneGeometry(10000, 10000, 10, 10);
+    var wireframegeo = new THREE.WireframeGeometry(geometry1); 
+    var wireframemat = new THREE.LineBasicMaterial({
+        linewidth : 0.01,
+        color : 0x444444
+    }); 
+    var wireframe = new THREE.Line( wireframegeo, wireframemat ); 
+    scene.add( wireframe );
+    
+
+
+    const geometry2 = new THREE.SphereGeometry(15, 32, 16);
+    const material2 = new THREE.MeshPhongMaterial({
+        map: THREE.ImageUtils.loadTexture('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSSSHK7FGikRA__ZroDRUI8OXVifRUBTIE6ow&usqp=CAU'),
+        bumpMap: THREE.ImageUtils.loadTexture('https://2.bp.blogspot.com/-oeguWUXEM8o/UkbyhLmUg-I/AAAAAAAAK-E/kSm3sH_f9fk/s1600/elev_bump_4k.jpg'),
+    });
+    const earth = new THREE.Mesh(geometry2, material2);
+    var earth_x = 400;
+    var alpha = 1;
+    var earth_y = 0;
+    earth.position.set(earth_x, earth_y, 0);
+    scene.add(earth);
+    
+    
+    
+    
+    
+    
+    const geometry3 = new THREE.SphereGeometry(55, 32, 16);
+    const material3 = new THREE.MeshBasicMaterial({
+        map: THREE.ImageUtils.loadTexture('https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTIiMlU5D6e3qDWgkGiBqp4E8HuLCUPcsiP0A&usqp=CAU'),
+    });
+    const sun = new THREE.Mesh(geometry3, material3);
+    sun.position.set(0, 0, 0);
+    scene.add(sun);
+    
+    
+    
+
+
+    const light = new THREE.PointLight(0xffffff, 2);
+    light.position.set(0, 0, 0);
+    scene.add(light);
+
+
+
+
+
+    const spotLightHelper = new THREE.PointLightHelper(light);
+    scene.add(spotLightHelper);
+
+
+    function animate() {
+        requestAnimationFrame(animate);
+        renderer.render(scene, camera);
+        //sphere.rotation.x += 0.01;
+        //line.rotation.x += 0.01;
+        earth.rotation.z += 0.05;
+        sun.rotation.z += 0.08;
+        earth_x = 400*Math.sin(alpha);
+        earth_y = 400*Math.cos(alpha);
+        //console.log(earth_y)
+        earth.position.set(earth_x, earth_y);
+        //camera.position.set(earth_x+200, earth_y+200, 100)
+        alpha+=0.01;
+        //line.rotation.y += 0.01;
+        controls.update();
+    }
+    animate();
+</script>
+
+</html>
